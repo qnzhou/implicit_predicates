@@ -29,6 +29,9 @@ target_link_libraries(implicit_predicates PUBLIC
     implicit_predicates::internal)
 target_include_directories(implicit_predicates PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 target_compile_features(implicit_predicates PRIVATE cxx_std_17)
+if(NOT MSVC)
+    target_compile_options(implicit_predicates PRIVATE "-Wall")
+endif()
 add_library(implicit_predicates::implicit_predicates ALIAS implicit_predicates)
 
 option(IMPLICIT_PREDICATES_UNIT_TESTS "Build implicit predicates unit tests" OFF)
