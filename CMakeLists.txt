@@ -16,8 +16,17 @@ add_library(internal_implicit_predicates STATIC ${INTERNAL_SRC_FILES} ${INTERNAL
 target_link_libraries(internal_implicit_predicates PUBLIC
     indirect_predicates::indirect_predicates)
 target_compile_features(internal_implicit_predicates PRIVATE cxx_std_17)
-target_compile_options(internal_implicit_predicates PRIVATE "-O0"
+target_compile_options(internal_implicit_predicates PRIVATE
     "-Wno-format-security" "-Wno-unknown-pragmas" "-Wno-return-type")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    # From the indirect predicates README:
+    # https://github.com/MarcoAttene/Indirect_Predicates#system-requirements
+    #
+    # Mac OSX. Unfortunately CLANG does not support direct access to the
+    # floating point environment. The only way to use this software with CLANG
+    # is to disable all optimizations (-O0).
+    target_compile_options(internal_implicit_predicates PRIVATE "-O0")
+endif()
 add_library(implicit_predicates::internal ALIAS internal_implicit_predicates)
 
 file(GLOB INC_FILES ${CMAKE_CURRENT_LIST_DIR}/include/*.h)

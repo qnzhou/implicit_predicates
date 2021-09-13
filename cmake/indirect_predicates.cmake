@@ -41,6 +41,8 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     target_compile_options(indirect_predicates PRIVATE "/D _CRT_SECURE_NO_WARNINGS")
 elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     # From the repo README:
+    # https://github.com/MarcoAttene/Indirect_Predicates#system-requirements
+    #
     # Mac OSX. Unfortunately CLANG does not support direct access to the
     # floating point environment. The only way to use this software with CLANG
     # is to disable all optimizations (-O0).
