@@ -45,6 +45,11 @@ TEST_CASE("benchmark", "[predicate][.benchmark]") {
         return orient1d(double_data.data() + offset,
                         double_data.data() + offset + 2);
     };
+    BENCHMARK("orient1d with double (non-robust)", i) {
+        size_t offset = i % (N - 4);
+        return orient1d_nonrobust(double_data.data() + offset,
+                        double_data.data() + offset + 2);
+    };
     BENCHMARK("orient2d with int", i) {
         size_t offset = i % (N - 9);
         return orient2d(int_data.data() + offset, int_data.data() + offset + 3,
@@ -53,6 +58,12 @@ TEST_CASE("benchmark", "[predicate][.benchmark]") {
     BENCHMARK("orient2d with double", i) {
         size_t offset = i % (N - 9);
         return orient2d(double_data.data() + offset,
+                        double_data.data() + offset + 3,
+                        double_data.data() + offset + 6);
+    };
+    BENCHMARK("orient2d with double (non-robust)", i) {
+        size_t offset = i % (N - 9);
+        return orient2d_nonrobust(double_data.data() + offset,
                         double_data.data() + offset + 3,
                         double_data.data() + offset + 6);
     };
@@ -65,6 +76,12 @@ TEST_CASE("benchmark", "[predicate][.benchmark]") {
     BENCHMARK("orient3d with double", i) {
         size_t offset = i % (N - 16);
         return orient3d(
+            double_data.data() + offset, double_data.data() + offset + 4,
+            double_data.data() + offset + 8, double_data.data() + offset + 12);
+    };
+    BENCHMARK("orient3d with double (non-robust)", i) {
+        size_t offset = i % (N - 16);
+        return orient3d_nonrobust(
             double_data.data() + offset, double_data.data() + offset + 4,
             double_data.data() + offset + 8, double_data.data() + offset + 12);
     };

@@ -22,6 +22,7 @@ namespace implicit_predicates {
  */
 Orientation orient1d(const double f0[2], const double f1[2]);
 Orientation orient1d(const Int f0[2], const Int f1[2]);
+Orientation orient1d_nonrobust(const double f0[2], const double f1[2]);
 
 /**
  * Compute the orientation of the 2D intersection of function 0 and 1 with
@@ -44,6 +45,8 @@ Orientation orient1d(const Int f0[2], const Int f1[2]);
 Orientation orient2d(const double f0[3], const double f1[3],
                      const double f2[3]);
 Orientation orient2d(const Int f0[3], const Int f1[3], const Int f2[3]);
+Orientation orient2d_nonrobust(const double f0[3], const double f1[3],
+                               const double f2[3]);
 
 /**
  * Compute the orientation of the 3D intersection of function 0, 1 and 2 with
@@ -72,4 +75,6 @@ Orientation orient3d(const double f0[4], const double f1[4], const double f2[4],
                      const double f3[4]);
 Orientation orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
                      const Int f3[4]);
+Orientation orient3d_nonrobust(const double f0[4], const double f1[4],
+                               const double f2[4], const double f3[4]);
 }  // namespace implicit_predicates
