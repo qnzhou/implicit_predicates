@@ -16,8 +16,10 @@ add_library(internal_implicit_predicates STATIC ${INTERNAL_SRC_FILES} ${INTERNAL
 target_link_libraries(internal_implicit_predicates PUBLIC
     indirect_predicates::indirect_predicates)
 target_compile_features(internal_implicit_predicates PRIVATE cxx_std_17)
-target_compile_options(internal_implicit_predicates PRIVATE
-    "-Wno-format-security" "-Wno-unknown-pragmas" "-Wno-return-type")
+if (NOT MSVC)
+    target_compile_options(internal_implicit_predicates PRIVATE
+        "-Wno-format-security" "-Wno-unknown-pragmas" "-Wno-return-type")
+endif()
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     # From the indirect predicates README:
     # https://github.com/MarcoAttene/Indirect_Predicates#system-requirements
