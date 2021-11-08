@@ -29,7 +29,8 @@ target_compile_features(indirect_predicates PRIVATE cxx_std_11)
 # Compiler-specific options
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # grant IEEE 754 compliance
-    target_compile_options(indirect_predicates PRIVATE -frounding-math)
+    target_compile_options(indirect_predicates PRIVATE "-frounding-math"
+        "-Wno-format-security")
     # use intrinsic functions (CHECK WHAT TO DO FOR GCC !!!!!!!!)
     # target_compile_options(indirect_predicates PUBLIC "/Oi")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
