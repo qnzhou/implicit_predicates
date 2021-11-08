@@ -28,9 +28,8 @@ jobs:
                   cmake .. -DCMAKE_GENERATOR_PLATFORM=x64 -DIMPLICIT_PREDICATES_UNIT_TESTS=On
                   cmake --build . --config Release -j
             - name: test
-              run: |
-                  cmake --build build --target help
-                  cmake --build build --target RUN_TESTS
+              run: cmake --build build --target RUN_TESTS
             - name: benchmark
               run: |
-                  build/implicit_predicates_tests.exe benchmark
+                  dir build
+                  build\\implicit_predicates_tests.exe benchmark
