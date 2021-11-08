@@ -31,4 +31,4 @@ jobs:
               run: |
                   cmake --build build --target test
             - name: benchmark
-              run: "build\implicit_predicates_tests.exe benchmark"
+              run: "build/implicit_predicates_tests.exe benchmark"
