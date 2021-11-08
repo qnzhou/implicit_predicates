@@ -12,8 +12,8 @@ jobs:
                   mkdir build
                   cd build
                   cmake .. -DIMPLICIT_PREDICATES_UNIT_TESTS=On -DCMAKE_BUILD_TYPE=Release
-                  cmake --build . --configure Release -j
-                  ctest -V
+                  cmake --build . --config Release -j
+                  cmake --build . --target test
             - name: benchmark
               run: |
                   cd build
