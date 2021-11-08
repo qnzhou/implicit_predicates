@@ -7,14 +7,28 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: build and run
+            - name: build
               run: |
                   mkdir build
                   cd build
                   cmake .. -DIMPLICIT_PREDICATES_UNIT_TESTS=On -DCMAKE_BUILD_TYPE=Release
                   cmake --build . --config Release -j
-                  cmake --build . --target test
+            - name: test
+              run: cmake --build build --target test
             - name: benchmark
+              run: build/implicit_predicates_tests benchmark
+    build-Windows:
+        runs-on: windows-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: build
               run: |
+                  mkdir build
                   cd build
-                  ./implicit_predicates_tests benchmark
+                  cmake .. -DCMAKE_GENERATOR_PLATFORM=x64 -DIMPLICIT_PREDICATES_UNIT_TESTS=On
+                  cmake --build . --config Release -j
+            - name: test
+              run: |
+                  cmake --build build --target test
+            - name: benchmark
+              run: "build\implicit_predicates_tests.exe benchmark"
