@@ -180,3 +180,73 @@ TEST_CASE("orient3d", "[3d][predicate]") {
     }
 }
 
+TEST_CASE("orient4d", "[4d][predicate]") {
+    using namespace implicit_predicates;
+
+    auto check = [](auto a, auto b, auto c, auto d, auto e) {
+        using T = decltype(a);
+        T p0[]{-a, 0, 0, 0, 0};
+        T p1[]{0, -b, 0, 0, 0};
+        T p2[]{0, 0, -c, 0, 0};
+        T p3[]{0, 0, 0, -d, 0};
+        T p4[]{0, 0, 0, 0, -e};
+        T p5[]{a, b, c, d, e};
+        T p6[]{-a, b, c, d, 0};
+        T p7[]{a, -b, c, d, 0};
+        T p8[]{a, b, -c, d, 0};
+        T p9[]{a, b, c, -d, 0};
+        T p10[]{a, b, c, d, -e};
+
+        REQUIRE(orient4d(p0, p1, p2, p3, p4) == NEGATIVE);
+        REQUIRE(orient4d(p1, p0, p2, p3, p4) == NEGATIVE);
+        REQUIRE(orient4d(p0, p0, p2, p3, p4) == INVALID);
+        REQUIRE(orient4d(p0, p1, p2, p3, p5) == POSITIVE);
+        REQUIRE(orient4d(p0, p1, p2, p3, p10) == NEGATIVE);
+        REQUIRE(orient4d(p6, p7, p8, p9, p10) == NEGATIVE);
+        REQUIRE(orient4d(p6, p7, p8, p9, p6) == ZERO);
+        REQUIRE(orient4d(p6, p7, p8, p9, p4) == NEGATIVE);
+    };
+
+    SECTION("float") { check(1., 2., 3., 4., 5.); }
+    SECTION("int") {
+        Int v0 = 1;
+        Int v1 = 3;
+        Int v2 = 10;
+        Int v3 = 11;
+        Int v4 = 15;
+        check(v0, v1, v2, v3, v4);
+    }
+    SECTION("float epsilon") {
+        constexpr double v0 = std::numeric_limits<double>::epsilon();
+        const double v1 = std::nextafter(v0, 1);
+        const double v2 = std::nextafter(v1, 1);
+        const double v3 = std::nextafter(v2, 1);
+        const double v4 = std::nextafter(v3, 1);
+        check(v0, v1, v2, v3, v4);
+    }
+    SECTION("large int") {
+        // `orient4d` will increase bit lengths by at least 5 times.
+        // so we cap int to be 2^24 bit long, because 24*5=120 < 127 bits.
+        constexpr Int v0 = (1 << 24) - 3;
+        constexpr Int v1 = (1 << 24) - 2;
+        constexpr Int v2 = (1 << 24) - 1;
+        constexpr Int v3 = (1 << 24);
+        constexpr Int v4 = (1 << 24) - 4;
+        check(v0, v1, v2, v3, v4);
+    }
+    SECTION("debug example") {
+        double p0[]{-2724, 3470, -1513, 345, 323};
+        double p1[]{-857, 2022, -3004, -2640, 9810};
+        double p2[]{1919, 2988, 3584, 3859, 3112};
+        double p3[]{-580, -200, -2920, -1099, 8811};
+        double p4[]{-90, 5521, 7468, -9920, 6243};
+
+        Int q0[]{-2724, 3470, -1513, 345, 323};
+        Int q1[]{-857, 2022, -3004, -2640, 9810};
+        Int q2[]{1919, 2988, 3584, 3859, 3112};
+        Int q3[]{-580, -200, -2920, -1099, 8811};
+        Int q4[]{-90, 5521, 7468, -9920, 6243};
+
+        REQUIRE(orient4d(p0, p1, p2, p3, p4) == orient4d(q0, q1, q2, q3, q4));
+    }
+}

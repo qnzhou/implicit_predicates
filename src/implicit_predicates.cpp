@@ -23,6 +23,28 @@ Orientation sign_of(T val) {
         return ZERO;
 }
 
+template <typename T>
+T det3(T a, T b, T c, T d, T e, T f, T g, T h, T i) {
+    // This version uses 9 multiplications.
+    return a * (e * i - f * h) - b * (d * i - g * f) + c * (d * h - e * g);
+}
+
+template <typename T>
+T det4(T a, T b, T c, T d, T e, T f, T g, T h, T i, T j, T k, T l, T m, T n,
+       T o, T p) {
+    // clang-format off
+
+    // This version uses 30 multiplications.  I don't think we get get away with
+    // fewer multiplications.
+    return (a*f - b*e) * (k*p - l*o) +
+           (c*e - a*g) * (j*p - l*n) +
+           (a*h - d*e) * (j*o - k*n) +
+           (b*g - c*f) * (i*p - l*m) +
+           (d*f - b*h) * (i*o - k*m) +
+           (c*h - d*g) * (i*n - j*m);
+    // clang-format on
+}
+
 }  // namespace
 
 Orientation orient1d(const double f0[2], const double f1[2]) {
@@ -143,11 +165,6 @@ Orientation orient3d(const double f0[4], const double f1[4], const double f2[4],
 
 Orientation orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
                      const Int f3[4]) {
-    auto det3 = [](Int a, Int b, Int c, Int d, Int e, Int f, Int g, Int h,
-                   Int i) {
-        return a * (e * i - f * h) - b * (d * i - g * f) + c * (d * h - e * g);
-    };
-
     // clang-format off
     const auto d0 = -det3(
             f0[1], f0[2], f0[3],
@@ -178,13 +195,8 @@ Orientation orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
     }
 }
 
-Orientation orient3d_nonrobust(const double f0[4], const double f1[4], const double f2[4],
-                     const double f3[4]) {
-    auto det3 = [](double a, double b, double c, double d, double e, double f,
-            double g, double h, double i) {
-        return a * (e * i - f * h) - b * (d * i - g * f) + c * (d * h - e * g);
-    };
-
+Orientation orient3d_nonrobust(const double f0[4], const double f1[4],
+                               const double f2[4], const double f3[4]) {
     // clang-format off
     const auto d0 = -det3(
             f0[1], f0[2], f0[3],
@@ -212,6 +224,118 @@ Orientation orient3d_nonrobust(const double f0[4], const double f1[4], const dou
         return sign_of(d0 * f3[0] + d1 * f3[1] + d2 * f3[2] + d3 * f3[3]);
     } else {
         return sign_of(-d0 * f3[0] - d1 * f3[1] - d2 * f3[2] - d3 * f3[3]);
+    }
+}
+
+Orientation orient4d(const double f0[5], const double f1[5], const double f2[5],
+                     const double f3[5], const double f4[5]) {
+    // clang-format off
+    const auto numerator = internal::det5(
+            f0[0], f0[1], f0[2], f0[3], f0[4],
+            f1[0], f1[1], f1[2], f1[3], f1[4],
+            f2[0], f2[1], f2[2], f2[3], f2[4],
+            f3[0], f3[1], f3[2], f3[3], f3[4],
+            f4[0], f4[1], f4[2], f4[3], f4[4]);
+    const auto denominator = internal::det5(
+            f0[0], f0[1], f0[2], f0[3], f0[4],
+            f1[0], f1[1], f1[2], f1[3], f1[4],
+            f2[0], f2[1], f2[2], f2[3], f2[4],
+            f3[0], f3[1], f3[2], f3[3], f3[4],
+                1,     1,     1,     1,     1);
+    // clang-format on
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(numerator);
+    } else {
+        return sign_of(-numerator);
+    }
+}
+
+Orientation orient4d(const Int f0[5], const Int f1[5], const Int f2[5],
+                     const Int f3[5], const Int f4[5]) {
+    // clang-format off
+    const auto d0 = det4(
+            f0[1], f0[2], f0[3], f0[4],
+            f1[1], f1[2], f1[3], f1[4],
+            f2[1], f2[2], f2[3], f2[4],
+            f3[1], f3[2], f3[3], f3[4]);
+    const auto d1 = -det4(
+            f0[0], f0[2], f0[3], f0[4],
+            f1[0], f1[2], f1[3], f1[4],
+            f2[0], f2[2], f2[3], f2[4],
+            f3[0], f3[2], f3[3], f3[4]);
+    const auto d2 = det4(
+            f0[0], f0[1], f0[3], f0[4],
+            f1[0], f1[1], f1[3], f1[4],
+            f2[0], f2[1], f2[3], f2[4],
+            f3[0], f3[1], f3[3], f3[4]);
+    const auto d3 = -det4(
+            f0[0], f0[1], f0[2], f0[4],
+            f1[0], f1[1], f1[2], f1[4],
+            f2[0], f2[1], f2[2], f2[4],
+            f3[0], f3[1], f3[2], f3[4]);
+    const auto d4 = det4(
+            f0[0], f0[1], f0[2], f0[3],
+            f1[0], f1[1], f1[2], f1[3],
+            f2[0], f2[1], f2[2], f2[3],
+            f3[0], f3[1], f3[2], f3[3]);
+    // clang-format on
+
+    const auto denominator = d0 + d1 + d2 + d3 + d4;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(d0 * f4[0] + d1 * f4[1] + d2 * f4[2] + d3 * f4[3] +
+                       d4 * f4[4]);
+    } else {
+        return sign_of(-d0 * f4[0] - d1 * f4[1] - d2 * f4[2] - d3 * f4[3] -
+                       d4 * f4[4]);
+    }
+}
+
+Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
+                               const double f2[5], const double f3[5],
+                               const double f4[5]) {
+    // clang-format off
+    const auto d0 = det4(
+            f0[1], f0[2], f0[3], f0[4],
+            f1[1], f1[2], f1[3], f1[4],
+            f2[1], f2[2], f2[3], f2[4],
+            f3[1], f3[2], f3[3], f3[4]);
+    const auto d1 = -det4(
+            f0[0], f0[2], f0[3], f0[4],
+            f1[0], f1[2], f1[3], f1[4],
+            f2[0], f2[2], f2[3], f2[4],
+            f3[0], f3[2], f3[3], f3[4]);
+    const auto d2 = det4(
+            f0[0], f0[1], f0[3], f0[4],
+            f1[0], f1[1], f1[3], f1[4],
+            f2[0], f2[1], f2[3], f2[4],
+            f3[0], f3[1], f3[3], f3[4]);
+    const auto d3 = -det4(
+            f0[0], f0[1], f0[2], f0[4],
+            f1[0], f1[1], f1[2], f1[4],
+            f2[0], f2[1], f2[2], f2[4],
+            f3[0], f3[1], f3[2], f3[4]);
+    const auto d4 = det4(
+            f0[0], f0[1], f0[2], f0[3],
+            f1[0], f1[1], f1[2], f1[3],
+            f2[0], f2[1], f2[2], f2[3],
+            f3[0], f3[1], f3[2], f3[3]);
+    // clang-format on
+
+    const auto denominator = d0 + d1 + d2 + d3 + d4;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(d0 * f4[0] + d1 * f4[1] + d2 * f4[2] + d3 * f4[3] +
+                       d4 * f4[4]);
+    } else {
+        return sign_of(-d0 * f4[0] - d1 * f4[1] - d2 * f4[2] - d3 * f4[3] -
+                       d4 * f4[4]);
     }
 }
 

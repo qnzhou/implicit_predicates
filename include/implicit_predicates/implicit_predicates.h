@@ -69,7 +69,7 @@ Orientation orient2d_nonrobust(const double f0[3], const double f1[3],
  *     * ZERO:     if the intersection of zero corssings of function 0,1,2 is
  *                 on the zero level set of function 3.
  *     * INVALID:  if function 0, 1 or 2 is a constant function, or they do not
- *    `            intersect at a point, which makes the problem ill-posed.
+ *                 intersect at a point, which makes the problem ill-posed.
  */
 Orientation orient3d(const double f0[4], const double f1[4], const double f2[4],
                      const double f3[4]);
@@ -77,4 +77,38 @@ Orientation orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
                      const Int f3[4]);
 Orientation orient3d_nonrobust(const double f0[4], const double f1[4],
                                const double f2[4], const double f3[4]);
+
+/**
+ * Compute the orientation of the 4D intersection of function 0, 1, 2 and 3 with
+ * respect to function 4.
+ *
+ * @param[in]  f0  Function values at the corners of a 4D simplex for
+ * function 0.
+ * @param[in]  f1  Function values at the corners of a 4D simplex for
+ * function 1.
+ * @param[in]  f2  Function values at the corners of a 4D simplex for
+ * function 2.
+ * @param[in]  f3  Function values at the corners of a 4D simplex for
+ * function 3.
+ * @param[in]  f4  Function values at the corners of a 4D simplex for
+ * function 4.
+ *
+ * @returns
+ *     * POSITIVE: if the intersection of zero crossings of function 0,1,2,3 is
+ *                 on the positive side of funciton 4.
+ *     * NEGATIVE: if the intersection of zero crossings of function 0,1,2,3 is
+ *                 on the negative side of function 4.
+ *     * ZERO:     if the intersection of zero corssings of function 0,1,2,3 is
+ *                 on the zero level set of function 4.
+ *     * INVALID:  if function 0, 1, 2 or 2 is a constant function, or they do
+ *                 not intersect at a point, which makes the problem ill-posed.
+ */
+Orientation orient4d(const double f0[5], const double f1[5], const double f2[5],
+                     const double f3[5], const double f4[5]);
+Orientation orient4d(const Int f0[5], const Int f1[5], const Int f2[5],
+                     const Int f3[5], const Int f4[5]);
+Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
+                               const double f2[5], const double f3[5],
+                               const double f4[5]);
+
 }  // namespace implicit_predicates
