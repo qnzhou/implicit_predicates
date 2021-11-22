@@ -250,3 +250,86 @@ TEST_CASE("orient4d", "[4d][predicate]") {
         REQUIRE(orient4d(p0, p1, p2, p3, p4) == orient4d(q0, q1, q2, q3, q4));
     }
 }
+
+TEST_CASE("mi_orient2d", "[2d][predicate][mi]") {
+    using namespace implicit_predicates;
+
+    auto check = [](auto a, auto b, auto c) {
+        using T = decltype(a);
+
+        T p0[]{a, b, c};
+        T p1[]{c, a, b};
+        T p2[]{b, c, a};
+
+        T d = std::max(a, std::max(b, c));
+        T e = std::min(a, std::min(b, c));
+
+        T q0[]{d, d, d};
+        T q1[]{e, e, e};
+
+        REQUIRE(mi_orient2d(p0, p1, p2, q0) == POSITIVE);
+        REQUIRE(mi_orient2d(p0, p1, p2, q1) == NEGATIVE);
+        REQUIRE(mi_orient2d(p0, p1, p2, p0) == ZERO);
+        REQUIRE(mi_orient2d(p0, p0, p2, p0) == INVALID);
+        REQUIRE(mi_orient2d(q0, p1, p2, p0) == NEGATIVE);
+        REQUIRE(mi_orient2d(q0, p1, p2, p1) == ZERO);
+        REQUIRE(mi_orient2d(q0, p1, p2, p2) == ZERO);
+        REQUIRE(mi_orient2d(q0, p1, p2, q1) == NEGATIVE);
+        REQUIRE(mi_orient2d(q0, p1, p2, q0) == ZERO);
+        REQUIRE(mi_orient2d(q1, p1, p2, q0) == POSITIVE);
+    };
+
+    SECTION("simple") {
+        double p0[]{3, 0, 0};
+        double p1[]{0, 3, 0};
+        double p2[]{0, 0, 3};
+
+        Int q0[]{3, 0, 0};
+        Int q1[]{0, 3, 0};
+        Int q2[]{0, 0, 3};
+
+        SECTION("Case 1") {
+            double p3[]{3, 3, 3};
+            Int q3[]{3, 3, 3};
+            REQUIRE(mi_orient2d(p0, p1, p2, p3) == POSITIVE);
+            REQUIRE(mi_orient2d(q0, q1, q2, q3) == POSITIVE);
+        }
+        SECTION("Case 2") {
+            double p3[]{0, 0, 0};
+            Int q3[]{0, 0, 0};
+            REQUIRE(mi_orient2d(p0, p1, p2, p3) == NEGATIVE);
+            REQUIRE(mi_orient2d(q0, q1, q2, q3) == NEGATIVE);
+        }
+        SECTION("Case 3") {
+            double p3[]{1, 1, 1};
+            Int q3[]{1, 1, 1};
+            REQUIRE(mi_orient2d(p0, p1, p2, p3) == ZERO);
+            REQUIRE(mi_orient2d(q0, q1, q2, q3) == ZERO);
+        }
+    }
+    SECTION("float") { check(1., 2., 3.); }
+    SECTION("int") {
+        Int v0 = 1;
+        Int v1 = 3;
+        Int v2 = 10;
+        check(v0, v1, v2);
+    }
+    SECTION("float epsilon") {
+        constexpr double v0 = std::numeric_limits<double>::epsilon();
+        const double v1 = std::nextafter(v0, 1);
+        const double v2 = std::nextafter(v1, 1);
+        check(v0, v1, v2);
+    }
+    SECTION("float epsilon and large number") {
+        constexpr double v0 = std::numeric_limits<double>::epsilon();
+        const double v1 = std::nextafter(v0, 1);
+        const double v2 = 1e21 / 7;
+        check(v0, v1, v2);
+    }
+    SECTION("large int") {
+        constexpr Int v0 = -std::numeric_limits<int32_t>::max() + 3;
+        constexpr Int v1 = 10;
+        constexpr Int v2 = std::numeric_limits<int32_t>::max() - 1;
+        check(v0, v1, v2);
+    }
+}

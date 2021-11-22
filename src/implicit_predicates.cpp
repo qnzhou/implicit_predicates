@@ -339,4 +339,68 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
     }
 }
 
+Orientation mi_orient2d(const double f0[3], const double f1[3],
+                        const double f2[3], const double f3[3]) {
+    // clang-format off
+    const auto numerator = internal::diff_det3(
+            f0[0], f0[1], f0[2],
+            f1[0], f1[1], f1[2],
+            f2[0], f2[1], f2[2],
+            f3[0], f3[1], f3[2]);
+    const auto denominator = internal::diff_det3_one(
+            f0[0], f0[1], f0[2],
+            f1[0], f1[1], f1[2],
+            f2[0], f2[1], f2[2]);
+    // clang-format on
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(numerator);
+    } else {
+        return sign_of(-numerator);
+    }
+}
+
+Orientation mi_orient2d(const Int f0[3], const Int f1[3], const Int f2[3],
+                        const Int f3[3]) {
+    const Int g1[3]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2]};
+    const Int g2[3]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2]};
+    const Int g3[3]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2]};
+
+    const Int D01 = g1[0] * g2[1] - g1[1] * g2[0];
+    const Int D12 = g1[1] * g2[2] - g1[2] * g2[1];
+    const Int D20 = g1[2] * g2[0] - g1[0] * g2[2];
+
+    const Int denominator = D01 + D12 + D20;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
+    } else {
+        return sign_of(-g3[0] * D12 - g3[1] * D20 - g3[2] * D01);
+    }
+}
+
+Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
+                                  const double f2[3], const double f3[3]) {
+    const double g1[3]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2]};
+    const double g2[3]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2]};
+    const double g3[3]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2]};
+
+    const double D01 = g1[0] * g2[1] - g1[1] * g2[0];
+    const double D12 = g1[1] * g2[2] - g1[2] * g2[1];
+    const double D20 = g1[2] * g2[0] - g1[0] * g2[2];
+
+    const double denominator = D01 + D12 + D20;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
+    } else {
+        return sign_of(-g3[0] * D12 - g3[1] * D20 - g3[2] * D01);
+    }
+}
+
 }  // namespace implicit_predicates
