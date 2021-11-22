@@ -106,4 +106,61 @@ TEST_CASE("benchmark", "[predicate][.benchmark]") {
             double_data.data() + offset + 10, double_data.data() + offset + 15,
             double_data.data() + offset + 20);
     };
+    BENCHMARK("mi_orient1d with int", i) {
+        size_t offset = i % (N - 6);
+        return mi_orient1d(int_data.data() + offset, int_data.data() + offset + 2,
+                int_data.data() + offset + 4);
+    };
+    BENCHMARK("mi_orient1d with double", i) {
+        size_t offset = i % (N - 6);
+        return mi_orient1d(double_data.data() + offset,
+                        double_data.data() + offset + 2,
+                        double_data.data() + offset + 4);
+    };
+    BENCHMARK("mi_orient1d with double (non-robust)", i) {
+        size_t offset = i % (N - 6);
+        return mi_orient1d_nonrobust(double_data.data() + offset,
+                                  double_data.data() + offset + 2,
+                                  double_data.data() + offset + 4);
+    };
+    BENCHMARK("mi_orient2d with int", i) {
+        size_t offset = i % (N - 12);
+        return mi_orient2d(int_data.data() + offset, int_data.data() + offset + 3,
+                        int_data.data() + offset + 6, int_data.data() + offset + 9);
+    };
+    BENCHMARK("mi_orient2d with double", i) {
+        size_t offset = i % (N - 12);
+        return mi_orient2d(double_data.data() + offset,
+                        double_data.data() + offset + 3,
+                        double_data.data() + offset + 6,
+                        double_data.data() + offset + 9);
+    };
+    BENCHMARK("mi_orient2d with double (non-robust)", i) {
+        size_t offset = i % (N - 12);
+        return mi_orient2d_nonrobust(double_data.data() + offset,
+                                  double_data.data() + offset + 3,
+                                  double_data.data() + offset + 6,
+                                  double_data.data() + offset + 9);
+    };
+    BENCHMARK("mi_orient3d with int", i) {
+        size_t offset = i % (N - 20);
+        return mi_orient3d(int_data.data() + offset, int_data.data() + offset + 4,
+                        int_data.data() + offset + 8,
+                        int_data.data() + offset + 12,
+                        int_data.data() + offset + 16);
+    };
+    BENCHMARK("mi_orient3d with double", i) {
+        size_t offset = i % (N - 20);
+        return mi_orient3d(
+            double_data.data() + offset, double_data.data() + offset + 4,
+            double_data.data() + offset + 8, double_data.data() + offset + 12,
+            double_data.data() + offset + 16);
+    };
+    BENCHMARK("mi_orient3d with double (non-robust)", i) {
+        size_t offset = i % (N - 20);
+        return mi_orient3d_nonrobust(
+            double_data.data() + offset, double_data.data() + offset + 4,
+            double_data.data() + offset + 8, double_data.data() + offset + 12,
+            double_data.data() + offset + 16);
+    };
 }
