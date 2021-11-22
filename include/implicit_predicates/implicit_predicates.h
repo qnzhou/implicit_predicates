@@ -130,9 +130,36 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
  */
 Orientation mi_orient2d(const double f0[3], const double f1[3],
                         const double f2[3], const double f3[3]);
-Orientation mi_orient2d(const Int f0[3], const Int f1[3],
-                        const Int f2[3], const Int f3[3]);
-Orientation mi_orient2d_nonrobust (const double f0[3], const double f1[3],
-                                   const double f2[3], const double f3[3]);
+Orientation mi_orient2d(const Int f0[3], const Int f1[3], const Int f2[3],
+                        const Int f3[3]);
+Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
+                                  const double f2[3], const double f3[3]);
+
+/**
+ * Compute the orientation of joint material interface of function 0, 1, 2 and
+ * 3 with respect to function 4.  The joint material interface of function 0, 1
+ * 2 and 3 is a point, p, such that f0(p) = f1(p) = f2(p) = f3(p).
+ *
+ * @param[in]  f0  Function values at the corner of a 3D simplex for function 0.
+ * @param[in]  f1  Function values at the corner of a 3D simplex for function 1.
+ * @param[in]  f2  Function values at the corner of a 3D simplex for function 2.
+ * @param[in]  f3  Function values at the corner of a 3D simplex for function 3.
+ * @param[in]  f4  Function values at the corner of a 3D simplex for function 4.
+ *
+ * @returns
+ *    * POSITIVE: if f4(p) > f0(p)
+ *    * NEGATIVE: if f4(p) < f0(p)
+ *    * ZERO:     if f4(p) = f0(p)
+ *    * INVALID:  if the joint material interface of function 0, 1, 2 and 3 does
+ *                not exist.  I.e. at least 2 functions are parallel.
+ */
+Orientation mi_orient3d(const double f0[4], const double f1[4],
+                        const double f2[4], const double f3[4],
+                        const double f4[4]);
+Orientation mi_orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
+                        const Int f3[4], const Int f4[4]);
+Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
+                                  const double f2[4], const double f3[4],
+                                  const double f4[4]);
 
 }  // namespace implicit_predicates
