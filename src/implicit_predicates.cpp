@@ -339,6 +339,53 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
     }
 }
 
+Orientation mi_orient1d(const double f0[2], const double f1[2],
+                        const double f2[2]) {
+    // clang-format off
+    const auto numerator = internal::diff_det2(
+            f0[0], f0[1],
+            f1[0], f1[1],
+            f2[0], f2[1]);
+    const auto denominator = internal::diff_det2_one(
+            f0[0], f0[1],
+            f1[0], f1[1]);
+    // clang-format on
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(numerator);
+    } else {
+        return sign_of(-numerator);
+    }
+}
+
+Orientation mi_orient1d(const Int f0[2], const Int f1[2], const Int f2[2]) {
+    const Int g1[]{f1[0] - f0[0], f1[1] - f0[1]};
+    const Int g2[]{f2[0] - f0[0], f2[1] - f0[1]};
+
+    if (g1[0] == g1[1]) {
+        return INVALID;
+    } else if (g1[0] > g1[1]) {
+        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
+    } else {
+        return sign_of(g2[0] * g1[1] - g2[1] * g1[0]);
+    }
+}
+
+Orientation mi_orient1d_nonrobust(const double f0[2], const double f1[2],
+                                  const double f2[2]) {
+    const double g1[]{f1[0] - f0[0], f1[1] - f0[1]};
+    const double g2[]{f2[0] - f0[0], f2[1] - f0[1]};
+
+    if (g1[0] == g1[1]) {
+        return INVALID;
+    } else if (g1[0] > g1[1]) {
+        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
+    } else {
+        return sign_of(g2[0] * g1[1] - g2[1] * g1[0]);
+    }
+}
+
 Orientation mi_orient2d(const double f0[3], const double f1[3],
                         const double f2[3], const double f3[3]) {
     // clang-format off
@@ -461,12 +508,17 @@ Orientation mi_orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
     }
 }
 
-Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4], const double f2[4],
-                        const double f3[4], const double f4[4]) {
-    const double g1[]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2], f1[3] - f0[3]};
-    const double g2[]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2], f2[3] - f0[3]};
-    const double g3[]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2], f3[3] - f0[3]};
-    const double g4[]{f4[0] - f0[0], f4[1] - f0[1], f4[2] - f0[2], f4[3] - f0[3]};
+Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
+                                  const double f2[4], const double f3[4],
+                                  const double f4[4]) {
+    const double g1[]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2],
+                      f1[3] - f0[3]};
+    const double g2[]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2],
+                      f2[3] - f0[3]};
+    const double g3[]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2],
+                      f3[3] - f0[3]};
+    const double g4[]{f4[0] - f0[0], f4[1] - f0[1], f4[2] - f0[2],
+                      f4[3] - f0[3]};
 
     // clang-format off
     const auto D0 = det3(g1[1], g1[2], g1[3],

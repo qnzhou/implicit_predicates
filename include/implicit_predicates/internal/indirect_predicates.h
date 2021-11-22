@@ -68,5 +68,13 @@ int diff_det4_one(double p0, double p1, double p2, double p3,
                   double q0, double q1, double q2, double q3,
                   double r0, double r1, double r2, double r3,
                   double s0, double s1, double s2, double s3);
+
+int diff_det2(double p0, double p1,
+              double q0, double q1,
+              double r0, double r1);
+
+int diff_det2_one(double p0, double p1,
+                  double q0, double q1);
+
 // clang-format on
 }  // namespace implicit_predicates::internal

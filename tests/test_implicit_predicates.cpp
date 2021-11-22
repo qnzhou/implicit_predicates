@@ -251,6 +251,81 @@ TEST_CASE("orient4d", "[4d][predicate]") {
     }
 }
 
+TEST_CASE("mi_orient1d", "[1d][predicate][mi]") {
+    using namespace implicit_predicates;
+
+    auto check = [](auto a, auto b) {
+        using T = decltype(a);
+
+        T p0[]{a, b};
+        T p1[]{b, a};
+
+        T c = std::max(a, b);
+        T d = std::min(a, b);
+
+        T q0[]{c, c};
+        T q1[]{d, d};
+
+        REQUIRE(mi_orient1d(p0, p1, q0) == POSITIVE);
+        REQUIRE(mi_orient1d(p0, p1, q1) == NEGATIVE);
+        REQUIRE(mi_orient1d(p0, p1, p0) == ZERO);
+        REQUIRE(mi_orient1d(p0, p0, p0) == INVALID);
+        REQUIRE(mi_orient1d(q0, p1, p0) == NEGATIVE);
+        REQUIRE(mi_orient1d(q0, p1, p1) == ZERO);
+        REQUIRE(mi_orient1d(q0, p1, q1) == NEGATIVE);
+        REQUIRE(mi_orient1d(q0, p1, q0) == ZERO);
+        REQUIRE(mi_orient1d(q1, p1, q0) == POSITIVE);
+    };
+
+    SECTION("simple") {
+        double p0[]{2, 0};
+        double p1[]{0, 2};
+
+        Int q0[]{2, 0};
+        Int q1[]{0, 2};
+
+        SECTION("Case 1") {
+            double p2[]{2, 2};
+            Int q2[]{2, 2};
+            REQUIRE(mi_orient1d(p0, p1, p2) == POSITIVE);
+            REQUIRE(mi_orient1d(q0, q1, q2) == POSITIVE);
+        }
+        SECTION("Case 2") {
+            double p2[]{0, 0};
+            Int q2[]{0, 0};
+            REQUIRE(mi_orient1d(p0, p1, p2) == NEGATIVE);
+            REQUIRE(mi_orient1d(q0, q1, q2) == NEGATIVE);
+        }
+        SECTION("Case 3") {
+            double p2[]{1, 1};
+            Int q2[]{1, 1};
+            REQUIRE(mi_orient1d(p0, p1, p2) == ZERO);
+            REQUIRE(mi_orient1d(q0, q1, q2) == ZERO);
+        }
+    }
+    SECTION("float") { check(1., 2.); }
+    SECTION("int") {
+        Int v0 = 1;
+        Int v1 = 3;
+        check(v0, v1);
+    }
+    SECTION("float epsilon") {
+        constexpr double v0 = std::numeric_limits<double>::epsilon();
+        const double v1 = std::nextafter(v0, 1);
+        check(v0, v1);
+    }
+    SECTION("float epsilon and large number") {
+        constexpr double v0 = std::numeric_limits<double>::epsilon();
+        const double v1 = std::nextafter(v0, 1);
+        check(v0, v1);
+    }
+    SECTION("large int") {
+        constexpr Int v0 = -std::numeric_limits<int32_t>::max() + 3;
+        constexpr Int v1 = 10;
+        check(v0, v1);
+    }
+}
+
 TEST_CASE("mi_orient2d", "[2d][predicate][mi]") {
     using namespace implicit_predicates;
 
