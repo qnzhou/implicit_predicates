@@ -121,9 +121,9 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
  * @param[in]  f2  Function values at the corner of a 1D simplex for function 2.
  *
  * @returns
- *    * POSITIVE: if f2(p) > f0(p)
- *    * NEGATIVE: if f2(p) < f0(p)
- *    * ZERO:     if f2(p) = f0(p)
+ *    * POSITIVE: if f0(p) > f2(p), i.e. joint of f0, f1 is above f2.
+ *    * NEGATIVE: if f0(p) < f2(p), i.e. joint of f0, f1 is below f2.
+ *    * ZERO:     if f0(p) = f2(p), i.e. joint of f0, f1 equals f2.
  *    * INVALID:  if the joint material interface of function 0 and 1 does
  *                not exist.  I.e. at least 2 functions are parallel.
  */
@@ -144,9 +144,9 @@ Orientation mi_orient1d_nonrobust(const double f0[2], const double f1[2],
  * @param[in]  f3  Function values at the corner of a 2D simplex for function 3.
  *
  * @returns
- *    * POSITIVE: if f3(p) > f0(p)
- *    * NEGATIVE: if f3(p) < f0(p)
- *    * ZERO:     if f3(p) = f0(p)
+ *    * POSITIVE: if f0(p) > f3(p), i.e. joint of f0, f1, f2 is above f3.
+ *    * NEGATIVE: if f0(p) < f3(p), i.e. joint of f0, f1, f2 is below f3.
+ *    * ZERO:     if f0(p) = f3(p), i.e. joint of f0, f1, f2 equals f3.
  *    * INVALID:  if the joint material interface of function 0, 1 and 2 does
  *                not exist.  I.e. at least 2 functions are parallel.
  */
@@ -169,9 +169,9 @@ Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
  * @param[in]  f4  Function values at the corner of a 3D simplex for function 4.
  *
  * @returns
- *    * POSITIVE: if f4(p) > f0(p)
- *    * NEGATIVE: if f4(p) < f0(p)
- *    * ZERO:     if f4(p) = f0(p)
+ *    * POSITIVE: if f0(p) > f4(p), i.e. joint of f0, f1, f2, f3 is above f4.
+ *    * NEGATIVE: if f0(p) < f4(p), i.e. joint of f0, f1, f2, f3 is below f4.
+ *    * ZERO:     if f0(p) = f4(p), i.e. joint of f0, f1, f2, f3 equals f4.
  *    * INVALID:  if the joint material interface of function 0, 1, 2 and 3 does
  *                not exist.  I.e. at least 2 functions are parallel.
  */

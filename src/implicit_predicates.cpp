@@ -353,9 +353,9 @@ Orientation mi_orient1d(const double f0[2], const double f1[2],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(numerator);
-    } else {
         return sign_of(-numerator);
+    } else {
+        return sign_of(numerator);
     }
 }
 
@@ -366,9 +366,9 @@ Orientation mi_orient1d(const Int f0[2], const Int f1[2], const Int f2[2]) {
     if (g1[0] == g1[1]) {
         return INVALID;
     } else if (g1[0] > g1[1]) {
-        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
-    } else {
         return sign_of(g2[0] * g1[1] - g2[1] * g1[0]);
+    } else {
+        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
     }
 }
 
@@ -380,9 +380,9 @@ Orientation mi_orient1d_nonrobust(const double f0[2], const double f1[2],
     if (g1[0] == g1[1]) {
         return INVALID;
     } else if (g1[0] > g1[1]) {
-        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
-    } else {
         return sign_of(g2[0] * g1[1] - g2[1] * g1[0]);
+    } else {
+        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
     }
 }
 
@@ -402,9 +402,9 @@ Orientation mi_orient2d(const double f0[3], const double f1[3],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(numerator);
-    } else {
         return sign_of(-numerator);
+    } else {
+        return sign_of(numerator);
     }
 }
 
@@ -423,9 +423,9 @@ Orientation mi_orient2d(const Int f0[3], const Int f1[3], const Int f2[3],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
-    } else {
         return sign_of(-g3[0] * D12 - g3[1] * D20 - g3[2] * D01);
+    } else {
+        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
     }
 }
 
@@ -444,9 +444,9 @@ Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
-    } else {
         return sign_of(-g3[0] * D12 - g3[1] * D20 - g3[2] * D01);
+    } else {
+        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
     }
 }
 
@@ -469,9 +469,9 @@ Orientation mi_orient3d(const double f0[4], const double f1[4],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(numerator);
-    } else {
         return sign_of(-numerator);
+    } else {
+        return sign_of(numerator);
     }
 }
 
@@ -502,9 +502,9 @@ Orientation mi_orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
-    } else {
         return sign_of(D0 * g4[0] - D1 * g4[1] + D2 * g4[2] - D3 * g4[3]);
+    } else {
+        return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
     }
 }
 
@@ -540,9 +540,9 @@ Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
     if (denominator == 0) {
         return INVALID;
     } else if (denominator > 0) {
-        return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
-    } else {
         return sign_of(D0 * g4[0] - D1 * g4[1] + D2 * g4[2] - D3 * g4[3]);
+    } else {
+        return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
     }
 }
 

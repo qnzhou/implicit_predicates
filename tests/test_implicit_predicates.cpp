@@ -266,15 +266,15 @@ TEST_CASE("mi_orient1d", "[1d][predicate][mi]") {
         T q0[]{c, c};
         T q1[]{d, d};
 
-        REQUIRE(mi_orient1d(p0, p1, q0) == POSITIVE);
-        REQUIRE(mi_orient1d(p0, p1, q1) == NEGATIVE);
+        REQUIRE(mi_orient1d(p0, p1, q0) == NEGATIVE);
+        REQUIRE(mi_orient1d(p0, p1, q1) == POSITIVE);
         REQUIRE(mi_orient1d(p0, p1, p0) == ZERO);
         REQUIRE(mi_orient1d(p0, p0, p0) == INVALID);
-        REQUIRE(mi_orient1d(q0, p1, p0) == NEGATIVE);
+        REQUIRE(mi_orient1d(q0, p1, p0) == POSITIVE);
         REQUIRE(mi_orient1d(q0, p1, p1) == ZERO);
-        REQUIRE(mi_orient1d(q0, p1, q1) == NEGATIVE);
+        REQUIRE(mi_orient1d(q0, p1, q1) == POSITIVE);
         REQUIRE(mi_orient1d(q0, p1, q0) == ZERO);
-        REQUIRE(mi_orient1d(q1, p1, q0) == POSITIVE);
+        REQUIRE(mi_orient1d(q1, p1, q0) == NEGATIVE);
     };
 
     SECTION("simple") {
@@ -287,14 +287,14 @@ TEST_CASE("mi_orient1d", "[1d][predicate][mi]") {
         SECTION("Case 1") {
             double p2[]{2, 2};
             Int q2[]{2, 2};
-            REQUIRE(mi_orient1d(p0, p1, p2) == POSITIVE);
-            REQUIRE(mi_orient1d(q0, q1, q2) == POSITIVE);
+            REQUIRE(mi_orient1d(p0, p1, p2) == NEGATIVE);
+            REQUIRE(mi_orient1d(q0, q1, q2) == NEGATIVE);
         }
         SECTION("Case 2") {
             double p2[]{0, 0};
             Int q2[]{0, 0};
-            REQUIRE(mi_orient1d(p0, p1, p2) == NEGATIVE);
-            REQUIRE(mi_orient1d(q0, q1, q2) == NEGATIVE);
+            REQUIRE(mi_orient1d(p0, p1, p2) == POSITIVE);
+            REQUIRE(mi_orient1d(q0, q1, q2) == POSITIVE);
         }
         SECTION("Case 3") {
             double p2[]{1, 1};
@@ -342,16 +342,16 @@ TEST_CASE("mi_orient2d", "[2d][predicate][mi]") {
         T q0[]{d, d, d};
         T q1[]{e, e, e};
 
-        REQUIRE(mi_orient2d(p0, p1, p2, q0) == POSITIVE);
-        REQUIRE(mi_orient2d(p0, p1, p2, q1) == NEGATIVE);
+        REQUIRE(mi_orient2d(p0, p1, p2, q0) == NEGATIVE);
+        REQUIRE(mi_orient2d(p0, p1, p2, q1) == POSITIVE);
         REQUIRE(mi_orient2d(p0, p1, p2, p0) == ZERO);
         REQUIRE(mi_orient2d(p0, p0, p2, p0) == INVALID);
-        REQUIRE(mi_orient2d(q0, p1, p2, p0) == NEGATIVE);
+        REQUIRE(mi_orient2d(q0, p1, p2, p0) == POSITIVE);
         REQUIRE(mi_orient2d(q0, p1, p2, p1) == ZERO);
         REQUIRE(mi_orient2d(q0, p1, p2, p2) == ZERO);
-        REQUIRE(mi_orient2d(q0, p1, p2, q1) == NEGATIVE);
+        REQUIRE(mi_orient2d(q0, p1, p2, q1) == POSITIVE);
         REQUIRE(mi_orient2d(q0, p1, p2, q0) == ZERO);
-        REQUIRE(mi_orient2d(q1, p1, p2, q0) == POSITIVE);
+        REQUIRE(mi_orient2d(q1, p1, p2, q0) == NEGATIVE);
     };
 
     SECTION("simple") {
@@ -366,14 +366,14 @@ TEST_CASE("mi_orient2d", "[2d][predicate][mi]") {
         SECTION("Case 1") {
             double p3[]{3, 3, 3};
             Int q3[]{3, 3, 3};
-            REQUIRE(mi_orient2d(p0, p1, p2, p3) == POSITIVE);
-            REQUIRE(mi_orient2d(q0, q1, q2, q3) == POSITIVE);
+            REQUIRE(mi_orient2d(p0, p1, p2, p3) == NEGATIVE);
+            REQUIRE(mi_orient2d(q0, q1, q2, q3) == NEGATIVE);
         }
         SECTION("Case 2") {
             double p3[]{0, 0, 0};
             Int q3[]{0, 0, 0};
-            REQUIRE(mi_orient2d(p0, p1, p2, p3) == NEGATIVE);
-            REQUIRE(mi_orient2d(q0, q1, q2, q3) == NEGATIVE);
+            REQUIRE(mi_orient2d(p0, p1, p2, p3) == POSITIVE);
+            REQUIRE(mi_orient2d(q0, q1, q2, q3) == POSITIVE);
         }
         SECTION("Case 3") {
             double p3[]{1, 1, 1};
@@ -426,16 +426,16 @@ TEST_CASE("mi_orient3d", "[3d][predicate][mi]") {
         T q0[]{e, e, e, e};
         T q1[]{f, f, f, f};
 
-        REQUIRE(mi_orient3d(p0, p1, p2, p3, q0) == POSITIVE);
-        REQUIRE(mi_orient3d(p0, p1, p2, p3, q1) == NEGATIVE);
+        REQUIRE(mi_orient3d(p0, p1, p2, p3, q0) == NEGATIVE);
+        REQUIRE(mi_orient3d(p0, p1, p2, p3, q1) == POSITIVE);
         REQUIRE(mi_orient3d(p0, p1, p2, p3, p0) == ZERO);
         REQUIRE(mi_orient3d(p0, p0, p2, p3, p0) == INVALID);
-        REQUIRE(mi_orient3d(q0, p1, p2, p3, p0) == NEGATIVE);
+        REQUIRE(mi_orient3d(q0, p1, p2, p3, p0) == POSITIVE);
         REQUIRE(mi_orient3d(q0, p1, p2, p3, p1) == ZERO);
         REQUIRE(mi_orient3d(q0, p1, p2, p3, p2) == ZERO);
-        REQUIRE(mi_orient3d(q0, p1, p2, p3, q1) == NEGATIVE);
+        REQUIRE(mi_orient3d(q0, p1, p2, p3, q1) == POSITIVE);
         REQUIRE(mi_orient3d(q0, p1, p2, p3, q0) == ZERO);
-        REQUIRE(mi_orient3d(q1, p1, p2, p3, q0) == POSITIVE);
+        REQUIRE(mi_orient3d(q1, p1, p2, p3, q0) == NEGATIVE);
     };
 
     SECTION("simple") {
@@ -452,14 +452,14 @@ TEST_CASE("mi_orient3d", "[3d][predicate][mi]") {
         SECTION("Case 1") {
             double p4[]{4, 3, 3, 3};
             Int q4[]{4, 3, 3, 3};
-            REQUIRE(mi_orient3d(p0, p1, p2, p3, p4) == POSITIVE);
-            REQUIRE(mi_orient3d(q0, q1, q2, q3, q4) == POSITIVE);
+            REQUIRE(mi_orient3d(p0, p1, p2, p3, p4) == NEGATIVE);
+            REQUIRE(mi_orient3d(q0, q1, q2, q3, q4) == NEGATIVE);
         }
         SECTION("Case 2") {
             double p4[]{0, 0, 0, 1};
             Int q4[]{0, 0, 0, 1};
-            REQUIRE(mi_orient3d(p0, p1, p2, p3, p4) == NEGATIVE);
-            REQUIRE(mi_orient3d(q0, q1, q2, q3, q4) == NEGATIVE);
+            REQUIRE(mi_orient3d(p0, p1, p2, p3, p4) == POSITIVE);
+            REQUIRE(mi_orient3d(q0, q1, q2, q3, q4) == POSITIVE);
         }
         SECTION("Case 3") {
             double p4[]{1, 1, 1, 1};
