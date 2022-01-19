@@ -9,7 +9,7 @@ include(absl)
 include(indirect_predicates)
 
 # Internal lib contains the specialized indirect predicates.
-file(GLOB INTERNAL_INC_FILES ${CMAKE_CURRENT_LIST_DIR}/include/internal/*.h)
+file(GLOB INTERNAL_INC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/internal/*.h)
 file(GLOB INTERNAL_SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/internal/*.cpp)
 
 add_library(internal_implicit_predicates STATIC ${INTERNAL_SRC_FILES} ${INTERNAL_INC_FILES})
@@ -30,6 +30,12 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     target_compile_options(internal_implicit_predicates PRIVATE "-O0")
 endif()
 add_library(implicit_predicates::internal ALIAS internal_implicit_predicates)
+
+option(IMPLICIT_PREDICATES_STAGE_STATS "Track stats of different stages." OFF)
+if (IMPLICIT_PREDICATES_STAGE_STATS)
+    target_compile_definitions(internal_implicit_predicates PUBLIC
+        "-DIMPLICIT_PREDICATES_STAGE_STATS")
+endif()
 
 file(GLOB INC_FILES ${CMAKE_CURRENT_LIST_DIR}/include/*.h)
 file(GLOB SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
