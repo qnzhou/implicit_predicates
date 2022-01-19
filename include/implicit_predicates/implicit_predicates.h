@@ -2,6 +2,8 @@
 
 #include <implicit_predicates/common.h>
 
+#include <array>
+
 namespace implicit_predicates {
 
 /**
@@ -183,5 +185,17 @@ Orientation mi_orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
 Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
                                   const double f2[4], const double f3[4],
                                   const double f4[4]);
+
+/**
+ * Return the execution count of different computation stages.  This funciton
+ * only return valid count if compiler flag `IMPLICIT_PREDICATES_STAGE_STATS`
+ * is on.
+ *
+ * @return {c0, c1, c2} where c0 <= c1 <= c2.
+ *   * c0: Semi-static filter execution count;
+ *   * c1: Interval arithmetic execution count;
+ *   * c3: Exact computation execution count;
+ */
+std::array<size_t, 3> get_stage_stats();
 
 }  // namespace implicit_predicates

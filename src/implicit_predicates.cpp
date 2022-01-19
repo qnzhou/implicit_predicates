@@ -1,8 +1,10 @@
 #include <implicit_predicates/implicit_predicates.h>
-#include "internal/indirect_predicates.h"
 
 #include <cmath>
 #include <type_traits>
+
+#include "internal/indirect_predicates.h"
+#include "internal/stage_stats.h"
 
 namespace implicit_predicates {
 
@@ -544,6 +546,12 @@ Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
     } else {
         return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
     }
+}
+
+std::array<size_t, 3> get_stage_stats() {
+    return {internal::semi_static_filter_stage,
+            internal::interval_arithmetic_stage,
+            internal::exact_computation_stage};
 }
 
 }  // namespace implicit_predicates
