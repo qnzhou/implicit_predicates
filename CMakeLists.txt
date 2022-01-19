@@ -9,7 +9,7 @@ include(absl)
 include(indirect_predicates)
 
 # Internal lib contains the specialized indirect predicates.
-file(GLOB INTERNAL_INC_FILES ${CMAKE_CURRENT_LIST_DIR}/include/internal/*.h)
+file(GLOB INTERNAL_INC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/internal/*.h)
 file(GLOB INTERNAL_SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/src/internal/*.cpp)
 
 add_library(internal_implicit_predicates STATIC ${INTERNAL_SRC_FILES} ${INTERNAL_INC_FILES})

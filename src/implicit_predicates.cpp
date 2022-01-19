@@ -1,5 +1,5 @@
 #include <implicit_predicates/implicit_predicates.h>
-#include <implicit_predicates/internal/indirect_predicates.h>
+#include "internal/indirect_predicates.h"
 
 #include <cmath>
 #include <type_traits>
