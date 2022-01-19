@@ -1,4 +1,5 @@
 #include <implicit_point.h>
+#include "stage_stats.h"
 
 #pragma intrinsic(fabs)
 
@@ -119,10 +120,21 @@ int diff_det3_one_exact(double p0, double p1, double p2, double q0, double q1, d
 int diff_det3_one(double p0, double p1, double p2, double q0, double q1, double q2, double r0, double r1, double r2)
 {
    int ret;
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   semi_static_filter_stage++;
+#endif
    ret = diff_det3_one_filtered(p0, p1, p2, q0, q1, q2, r0, r1, r2);
    if (ret != Filtered_Sign::UNCERTAIN) return ret;
+
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   interval_arithmetic_stage++;
+#endif
    ret = diff_det3_one_interval(p0, p1, p2, q0, q1, q2, r0, r1, r2);
    if (ret != Filtered_Sign::UNCERTAIN) return ret;
+
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   exact_computation_stage++;
+#endif
    return diff_det3_one_exact(p0, p1, p2, q0, q1, q2, r0, r1, r2);
 }
 

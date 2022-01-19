@@ -1,4 +1,5 @@
 #include <implicit_point.h>
+#include "stage_stats.h"
 
 #pragma intrinsic(fabs)
 
@@ -325,10 +326,21 @@ int diff_det4_exact(double p0, double p1, double p2, double p3, double q0, doubl
 int diff_det4(double p0, double p1, double p2, double p3, double q0, double q1, double q2, double q3, double r0, double r1, double r2, double r3, double s0, double s1, double s2, double s3, double t0, double t1, double t2, double t3)
 {
    int ret;
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   semi_static_filter_stage++;
+#endif
    ret = diff_det4_filtered(p0, p1, p2, p3, q0, q1, q2, q3, r0, r1, r2, r3, s0, s1, s2, s3, t0, t1, t2, t3);
    if (ret != Filtered_Sign::UNCERTAIN) return ret;
+
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   interval_arithmetic_stage++;
+#endif
    ret = diff_det4_interval(p0, p1, p2, p3, q0, q1, q2, q3, r0, r1, r2, r3, s0, s1, s2, s3, t0, t1, t2, t3);
    if (ret != Filtered_Sign::UNCERTAIN) return ret;
+
+#ifdef IMPLICIT_PREDICATES_STAGE_STATS
+   exact_computation_stage++;
+#endif
    return diff_det4_exact(p0, p1, p2, p3, q0, q1, q2, q3, r0, r1, r2, r3, s0, s1, s2, s3, t0, t1, t2, t3);
 }
 
