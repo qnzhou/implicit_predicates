@@ -51,6 +51,15 @@ if(NOT MSVC)
 endif()
 add_library(implicit_predicates::implicit_predicates ALIAS implicit_predicates)
 
+option(IMPLICIT_PREDICATES_WITH_CGAL
+    "Add CGAL's exact construction for comparison" OFF)
+if (IMPLICIT_PREDICATES_WITH_CGAL)
+    include(cgal)
+    target_compile_definitions(implicit_predicates PUBLIC
+        "-DIMPLICIT_PREDICATES_WITH_CGAL")
+    target_link_libraries(implicit_predicates PUBLIC CGAL::CGAL CGAL::CGAL_Core)
+endif()
+
 option(IMPLICIT_PREDICATES_UNIT_TESTS "Build implicit predicates unit tests" OFF)
 if (IMPLICIT_PREDICATES_UNIT_TESTS)
     include(CTest)

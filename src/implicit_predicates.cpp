@@ -3,6 +3,10 @@
 #include <cmath>
 #include <type_traits>
 
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#endif
+
 #include "internal/indirect_predicates.h"
 #include "internal/stage_stats.h"
 
@@ -81,6 +85,19 @@ Orientation orient1d_nonrobust(const double f0[2], const double f1[2]) {
     }
 }
 
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation orient1d_cgal(const FT f0[2], const FT f1[2]) {
+    if (f0[0] == f0[1]) {
+        // Function 0 is constant.
+        return INVALID;
+    } else if (f0[1] < f0[0]) {
+        return sign_of(f0[0] * f1[1] - f0[1] * f1[0]);
+    } else {
+        return sign_of(-f0[0] * f1[1] + f0[1] * f1[0]);
+    }
+}
+#endif
+
 Orientation orient2d(const double f0[3], const double f1[3],
                      const double f2[3]) {
     // clang-format off
@@ -141,6 +158,26 @@ Orientation orient2d_nonrobust(const double f0[3], const double f1[3],
         return sign_of(-f2[0] * d0 - f2[1] * d1 - f2[2] * d2);
     }
 }
+
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation orient2d_cgal(const FT f0[3], const FT f1[3], const FT f2[3]) {
+    auto det2 = [](FT a, FT b, FT c, FT d) { return a * d - b * c; };
+
+    const auto d0 = det2(f0[1], f0[2], f1[1], f1[2]);
+    const auto d1 = -det2(f0[0], f0[2], f1[0], f1[2]);
+    const auto d2 = det2(f0[0], f0[1], f1[0], f1[1]);
+
+    const auto denominator = d0 + d1 + d2;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(f2[0] * d0 + f2[1] * d1 + f2[2] * d2);
+    } else {
+        return sign_of(-f2[0] * d0 - f2[1] * d1 - f2[2] * d2);
+    }
+}
+#endif
 
 Orientation orient3d(const double f0[4], const double f1[4], const double f2[4],
                      const double f3[4]) {
@@ -228,6 +265,40 @@ Orientation orient3d_nonrobust(const double f0[4], const double f1[4],
         return sign_of(-d0 * f3[0] - d1 * f3[1] - d2 * f3[2] - d3 * f3[3]);
     }
 }
+
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation orient3d_cgal(const FT f0[4], const FT f1[4], const FT f2[4],
+                          const FT f3[4]) {
+    // clang-format off
+    const auto d0 = -det3(
+            f0[1], f0[2], f0[3],
+            f1[1], f1[2], f1[3],
+            f2[1], f2[2], f2[3]);
+    const auto d1 = det3(
+            f0[0], f0[2], f0[3],
+            f1[0], f1[2], f1[3],
+            f2[0], f2[2], f2[3]);
+    const auto d2 = -det3(
+            f0[0], f0[1], f0[3],
+            f1[0], f1[1], f1[3],
+            f2[0], f2[1], f2[3]);
+    const auto d3 = det3(
+            f0[0], f0[1], f0[2],
+            f1[0], f1[1], f1[2],
+            f2[0], f2[1], f2[2]);
+    // clang-format on
+
+    const auto denominator = d0 + d1 + d2 + d3;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(d0 * f3[0] + d1 * f3[1] + d2 * f3[2] + d3 * f3[3]);
+    } else {
+        return sign_of(-d0 * f3[0] - d1 * f3[1] - d2 * f3[2] - d3 * f3[3]);
+    }
+}
+#endif
 
 Orientation orient4d(const double f0[5], const double f1[5], const double f2[5],
                      const double f3[5], const double f4[5]) {
@@ -341,6 +412,51 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
     }
 }
 
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation orient4d_cgal(const FT f0[5], const FT f1[5], const FT f2[5],
+                          const FT f3[5], const FT f4[5]) {
+    // clang-format off
+    const auto d0 = det4(
+            f0[1], f0[2], f0[3], f0[4],
+            f1[1], f1[2], f1[3], f1[4],
+            f2[1], f2[2], f2[3], f2[4],
+            f3[1], f3[2], f3[3], f3[4]);
+    const auto d1 = -det4(
+            f0[0], f0[2], f0[3], f0[4],
+            f1[0], f1[2], f1[3], f1[4],
+            f2[0], f2[2], f2[3], f2[4],
+            f3[0], f3[2], f3[3], f3[4]);
+    const auto d2 = det4(
+            f0[0], f0[1], f0[3], f0[4],
+            f1[0], f1[1], f1[3], f1[4],
+            f2[0], f2[1], f2[3], f2[4],
+            f3[0], f3[1], f3[3], f3[4]);
+    const auto d3 = -det4(
+            f0[0], f0[1], f0[2], f0[4],
+            f1[0], f1[1], f1[2], f1[4],
+            f2[0], f2[1], f2[2], f2[4],
+            f3[0], f3[1], f3[2], f3[4]);
+    const auto d4 = det4(
+            f0[0], f0[1], f0[2], f0[3],
+            f1[0], f1[1], f1[2], f1[3],
+            f2[0], f2[1], f2[2], f2[3],
+            f3[0], f3[1], f3[2], f3[3]);
+    // clang-format on
+
+    const auto denominator = d0 + d1 + d2 + d3 + d4;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(d0 * f4[0] + d1 * f4[1] + d2 * f4[2] + d3 * f4[3] +
+                       d4 * f4[4]);
+    } else {
+        return sign_of(-d0 * f4[0] - d1 * f4[1] - d2 * f4[2] - d3 * f4[3] -
+                       d4 * f4[4]);
+    }
+}
+#endif
+
 Orientation mi_orient1d(const double f0[2], const double f1[2],
                         const double f2[2]) {
     // clang-format off
@@ -387,6 +503,21 @@ Orientation mi_orient1d_nonrobust(const double f0[2], const double f1[2],
         return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
     }
 }
+
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation mi_orient1d_cgal(const FT f0[2], const FT f1[2], const FT f2[2]) {
+    const FT g1[]{f1[0] - f0[0], f1[1] - f0[1]};
+    const FT g2[]{f2[0] - f0[0], f2[1] - f0[1]};
+
+    if (g1[0] == g1[1]) {
+        return INVALID;
+    } else if (g1[0] > g1[1]) {
+        return sign_of(g2[0] * g1[1] - g2[1] * g1[0]);
+    } else {
+        return sign_of(g1[0] * g2[1] - g1[1] * g2[0]);
+    }
+}
+#endif
 
 Orientation mi_orient2d(const double f0[3], const double f1[3],
                         const double f2[3], const double f3[3]) {
@@ -451,6 +582,29 @@ Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
         return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
     }
 }
+
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation mi_orient2d_cgal(const FT f0[3], const FT f1[3], const FT f2[3],
+                             const FT f3[3]) {
+    const FT g1[3]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2]};
+    const FT g2[3]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2]};
+    const FT g3[3]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2]};
+
+    const FT D01 = g1[0] * g2[1] - g1[1] * g2[0];
+    const FT D12 = g1[1] * g2[2] - g1[2] * g2[1];
+    const FT D20 = g1[2] * g2[0] - g1[0] * g2[2];
+
+    const double denominator = D01 + D12 + D20;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(-g3[0] * D12 - g3[1] * D20 - g3[2] * D01);
+    } else {
+        return sign_of(g3[0] * D12 + g3[1] * D20 + g3[2] * D01);
+    }
+}
+#endif
 
 Orientation mi_orient3d(const double f0[4], const double f1[4],
                         const double f2[4], const double f3[4],
@@ -547,6 +701,41 @@ Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
         return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
     }
 }
+
+#ifdef IMPLICIT_PREDICATES_WITH_CGAL
+Orientation mi_orient3d_cgal(const FT f0[4], const FT f1[4], const FT f2[4],
+                             const FT f3[4], const FT f4[4]) {
+    const FT g1[]{f1[0] - f0[0], f1[1] - f0[1], f1[2] - f0[2], f1[3] - f0[3]};
+    const FT g2[]{f2[0] - f0[0], f2[1] - f0[1], f2[2] - f0[2], f2[3] - f0[3]};
+    const FT g3[]{f3[0] - f0[0], f3[1] - f0[1], f3[2] - f0[2], f3[3] - f0[3]};
+    const FT g4[]{f4[0] - f0[0], f4[1] - f0[1], f4[2] - f0[2], f4[3] - f0[3]};
+
+    // clang-format off
+    const auto D0 = det3(g1[1], g1[2], g1[3],
+                         g2[1], g2[2], g2[3],
+                         g3[1], g3[2], g3[3]);
+    const auto D1 = det3(g1[0], g1[2], g1[3],
+                         g2[0], g2[2], g2[3],
+                         g3[0], g3[2], g3[3]);
+    const auto D2 = det3(g1[0], g1[1], g1[3],
+                         g2[0], g2[1], g2[3],
+                         g3[0], g3[1], g3[3]);
+    const auto D3 = det3(g1[0], g1[1], g1[2],
+                         g2[0], g2[1], g2[2],
+                         g3[0], g3[1], g3[2]);
+    // clang-format on
+
+    const auto denominator = -D0 + D1 - D2 + D3;
+
+    if (denominator == 0) {
+        return INVALID;
+    } else if (denominator > 0) {
+        return sign_of(D0 * g4[0] - D1 * g4[1] + D2 * g4[2] - D3 * g4[3]);
+    } else {
+        return sign_of(-D0 * g4[0] + D1 * g4[1] - D2 * g4[2] + D3 * g4[3]);
+    }
+}
+#endif
 
 std::array<size_t, 3> get_stage_stats() {
     return {internal::semi_static_filter_stage,
