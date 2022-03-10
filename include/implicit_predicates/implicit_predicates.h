@@ -26,7 +26,7 @@ Orientation orient1d(const double f0[2], const double f1[2]);
 Orientation orient1d(const Int f0[2], const Int f1[2]);
 Orientation orient1d_nonrobust(const double f0[2], const double f1[2]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation orient1d_cgal(const double f0[2], const double f1[2]);
+Orientation orient1d_cgal(const FT f0[2], const FT f1[2]);
 #endif
 
 /**
@@ -53,8 +53,8 @@ Orientation orient2d(const Int f0[3], const Int f1[3], const Int f2[3]);
 Orientation orient2d_nonrobust(const double f0[3], const double f1[3],
                                const double f2[3]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation orient2d_cgal(const double f0[3], const double f1[3],
-                          const double f2[3]);
+Orientation orient2d_cgal(const FT f0[3], const FT f1[3],
+                          const FT f2[3]);
 #endif
 
 /**
@@ -87,8 +87,8 @@ Orientation orient3d(const Int f0[4], const Int f1[4], const Int f2[4],
 Orientation orient3d_nonrobust(const double f0[4], const double f1[4],
                                const double f2[4], const double f3[4]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation orient3d_cgal(const double f0[4], const double f1[4],
-                          const double f2[4], const double f3[4]);
+Orientation orient3d_cgal(const FT f0[4], const FT f1[4],
+                          const FT f2[4], const FT f3[4]);
 #endif
 
 /**
@@ -124,9 +124,9 @@ Orientation orient4d_nonrobust(const double f0[5], const double f1[5],
                                const double f2[5], const double f3[5],
                                const double f4[5]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation orient4d_cgal(const double f0[5], const double f1[5],
-                          const double f2[5], const double f3[5],
-                          const double f4[5]);
+Orientation orient4d_cgal(const FT f0[5], const FT f1[5],
+                          const FT f2[5], const FT f3[5],
+                          const FT f4[5]);
 #endif
 
 /**
@@ -151,8 +151,8 @@ Orientation mi_orient1d(const Int f0[2], const Int f1[2], const Int f2[2]);
 Orientation mi_orient1d_nonrobust(const double f0[2], const double f1[2],
                                   const double f2[2]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation mi_orient1d_cgal(const double f0[2], const double f1[2],
-                             const double f2[2]);
+Orientation mi_orient1d_cgal(const FT f0[2], const FT f1[2],
+                             const FT f2[2]);
 #endif
 
 /**
@@ -179,8 +179,8 @@ Orientation mi_orient2d(const Int f0[3], const Int f1[3], const Int f2[3],
 Orientation mi_orient2d_nonrobust(const double f0[3], const double f1[3],
                                   const double f2[3], const double f3[3]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation mi_orient2d_cgal(const double f0[3], const double f1[3],
-                             const double f2[3], const double f3[3]);
+Orientation mi_orient2d_cgal(const FT f0[3], const FT f1[3],
+                             const FT f2[3], const FT f3[3]);
 #endif
 
 /**
@@ -210,9 +210,9 @@ Orientation mi_orient3d_nonrobust(const double f0[4], const double f1[4],
                                   const double f2[4], const double f3[4],
                                   const double f4[4]);
 #ifdef IMPLICIT_PREDICATES_WITH_CGAL
-Orientation mi_orient3d_cgal(const double f0[4], const double f1[4],
-                             const double f2[4], const double f3[4],
-                             const double f4[4]);
+Orientation mi_orient3d_cgal(const FT f0[4], const FT f1[4],
+                             const FT f2[4], const FT f3[4],
+                             const FT f4[4]);
 #endif
 
 /**
