@@ -21,7 +21,7 @@ SET(INDIRECT_PREDICATES_INC_FILES
     ${indirect_predicates_SOURCE_DIR}/implicit_point.h
     ${indirect_predicates_SOURCE_DIR}/predicates/indirect_predicates.h)
 
-add_library(indirect_predicates ${INDIRECT_PREDICATES_SRC_FILES} ${INDIRECT_PREDICATES_INC_FILES})
+add_library(indirect_predicates SHARED ${INDIRECT_PREDICATES_SRC_FILES} ${INDIRECT_PREDICATES_INC_FILES})
 target_include_directories(indirect_predicates PUBLIC ${indirect_predicates_SOURCE_DIR})
 target_include_directories(indirect_predicates PUBLIC ${indirect_predicates_SOURCE_DIR}/predicates)
 target_compile_features(indirect_predicates PRIVATE cxx_std_11)
