@@ -40,6 +40,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     target_compile_options(indirect_predicates PRIVATE "/Oi")
     # turn off annoying warnings
     target_compile_options(indirect_predicates PRIVATE "/D _CRT_SECURE_NO_WARNINGS")
+    set_target_properties(indirect_predicates WINDOWS_EXPORT_ALL_SYMBOLS ON)
 elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     # From the repo README:
     # https://github.com/MarcoAttene/Indirect_Predicates#system-requirements
