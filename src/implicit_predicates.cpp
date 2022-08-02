@@ -594,7 +594,7 @@ Orientation mi_orient2d_cgal(const FT f0[3], const FT f1[3], const FT f2[3],
     const FT D12 = g1[1] * g2[2] - g1[2] * g2[1];
     const FT D20 = g1[2] * g2[0] - g1[0] * g2[2];
 
-    const double denominator = D01 + D12 + D20;
+    const auto denominator = D01 + D12 + D20;
 
     if (denominator == 0) {
         return INVALID;

@@ -21,7 +21,7 @@ SET(INDIRECT_PREDICATES_INC_FILES
     ${indirect_predicates_SOURCE_DIR}/implicit_point.h
     ${indirect_predicates_SOURCE_DIR}/predicates/indirect_predicates.h)
 
-add_library(indirect_predicates ${INDIRECT_PREDICATES_SRC_FILES} ${INDIRECT_PREDICATES_INC_FILES})
+add_library(indirect_predicates SHARED ${INDIRECT_PREDICATES_SRC_FILES} ${INDIRECT_PREDICATES_INC_FILES})
 target_include_directories(indirect_predicates PUBLIC ${indirect_predicates_SOURCE_DIR})
 target_include_directories(indirect_predicates PUBLIC ${indirect_predicates_SOURCE_DIR}/predicates)
 target_compile_features(indirect_predicates PRIVATE cxx_std_11)
@@ -40,6 +40,7 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     target_compile_options(indirect_predicates PRIVATE "/Oi")
     # turn off annoying warnings
     target_compile_options(indirect_predicates PRIVATE "/D _CRT_SECURE_NO_WARNINGS")
+    set_target_properties(indirect_predicates PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     # From the repo README:
     # https://github.com/MarcoAttene/Indirect_Predicates#system-requirements
